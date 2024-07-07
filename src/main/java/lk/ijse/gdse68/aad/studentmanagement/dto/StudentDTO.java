@@ -1,5 +1,12 @@
 package lk.ijse.gdse68.aad.studentmanagement.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class StudentDTO {
     private String id;
     private String name;
