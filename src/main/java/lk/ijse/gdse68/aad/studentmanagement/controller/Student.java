@@ -3,6 +3,7 @@ package lk.ijse.gdse68.aad.studentmanagement.controller;
 import java.io.*;
 
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import jakarta.servlet.ServletException;
@@ -23,7 +24,7 @@ public class Student extends HttpServlet {
 //        super.doPost(req, resp);
 //        todo:Save student
 
-//       var id= req.getParameter("id");
+//     01  var id= req.getParameter("id");
 //        var name= req.getParameter("name");
 //        var email= req.getParameter("email");
 //        var level= req.getParameter("level");
@@ -32,7 +33,7 @@ public class Student extends HttpServlet {
 //        System.out.println(email);
 //        System.out.println(level);
 
-        //JSON
+        //02.JSON
         //1.get the header to content type header check null d nattam chek krnwa ! nattam kiyl blnwa kohomad wenne kiyl
         //if true unam hadpu client ge kiyl ne ewnnw mokkd kiyl
 
@@ -40,7 +41,7 @@ public class Student extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
 
-//        BufferedReader reader = req.getReader(); //reade req
+//    03.    BufferedReader reader = req.getReader(); //reade req
 //        StringBuilder sb = new StringBuilder(); // sting bilder eken puluwn string eke swabaway krnn puluwan apit ona widiyt bild krnn append krnn glawann
 //        reader.lines().forEach(line -> sb.append(line).append("\n")); //append krnwa new line ekt ynn kiyl
 //        System.out.println(sb);
@@ -62,14 +63,44 @@ public class Student extends HttpServlet {
 
 //        process-json
 
-       JsonReader reader =  Json.createReader(req.getReader());
-        JsonObject jsonObject = reader.readObject();// json ob ekk hadgnnwa jawa ee eje kiynw wage ekk
-       String email = jsonObject.getString("email"); //json ob ekt adal krna manupulation krnn puluwn ekk json ob ekt pass krn ewa
-        System.out.println(email);
+        JsonReader reader =  Json.createReader(req.getReader());
+//   04.     JsonObject jsonObject = reader.readObject();// json ob ekk hadgnnwa jawa ee eje kiynw wage ekk
+//        String email = jsonObject.getString("email"); //json ob ekt adal krna manupulation krnn puluwn ekk json ob ekt pass krn ewa
+//        System.out.println(email);  //reader() method eken req data reade krnnn
 
 //        out put -sachini@gmail.com
 
+
+        // 06 - optional - json array processing
+       JsonArray jsonArray =  reader.readArray();
+       for(int i =0; i< jsonArray.size(); i++){
+           var jsonObject = jsonArray.getJsonObject(i);
+           System.out.println(jsonObject.getString("name"));
+           System.out.println(jsonObject.getString("email"));
+
+//           postman ge arry ek hadnn ona
+//                   [
+//           {
+//               "id":"S001",
+//                   "name":"Sakuni",
+//                   "email":"sakuni@gmail.com",
+//                   "city":"Galle",
+//                   "level":"L01"
+//
+//           }
+//],
+
+//           out-put
+//           Sakuni
+//           sakuni@gmail.com
+       }
+
         //json p type eke
+        // 05.send data to client
+//        var write =resp.getWriter();
+//        write.write(email); // writer() method eken req data write kranna
+
+        //optional - json array processing
     }
 
 
