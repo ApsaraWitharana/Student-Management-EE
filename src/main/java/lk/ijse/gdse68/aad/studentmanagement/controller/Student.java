@@ -49,7 +49,7 @@ public class Student extends HttpServlet {
        // 08. object binding of the json
 
         Jsonb jsonb = JsonbBuilder.create();  //json b type eke reference ekk hadagen jbilder eken
-        var writer = resp.getWriter();
+//        var writer = resp.getWriter();
         StudentDTO student = jsonb.fromJson(req.getReader(), StudentDTO.class); //eliyen en json student json t dagannwa fromjson gent pata 2 -reder and bined krn ob eke class type ek return krnne supplie krn class eke type ekk //map krgnnwa dto wl ek ek felde bined krnawa
         student.setId(Util.IdGenerate()); //id ek genngnn on hind nattm null enne
         System.out.println(student);
