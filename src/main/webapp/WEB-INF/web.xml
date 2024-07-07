@@ -5,10 +5,21 @@
          version="6.0">
 
 <!--    //add configurations-->
-<!--    context parameters-->
+<!--    context parameters  == servlet godak tibbat ona ekkt access tiyenwa podu tanak tamyi tiyenne-->
     <context-param>
-        <param-name>myparam</param-name>
-        <param-value>Hello Param</param-value>
+        <param-name>db-class</param-name>
+        <param-value>com.mysql.jdbc.Driver</param-value>
     </context-param>
-
+    <context-param>
+        <param-name>dburl</param-name>
+        <param-value>jdbc:mysql://localhost:3306</param-value>
+    </context-param>
+    <context-param>
+        <param-name>db-username</param-name>
+        <param-value>root</param-value>
+    </context-param>
+    <context-param>
+        <param-name>db-password</param-name>
+        <param-value>ijse@2001</param-value>
+    </context-param>
 </web-app>

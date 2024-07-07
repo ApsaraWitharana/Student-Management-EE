@@ -16,6 +16,13 @@ import java.util.List;
 
 @WebServlet(urlPatterns = "/demo")
 public class Demo  extends HttpServlet{
+
+    @Override
+    public void init() throws ServletException {
+        var initparameter = getServletContext().getInitParameter("myparam");
+        System.out.println(initparameter);
+    }
+
     @Override
         protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //            super.doPost(req, resp);
