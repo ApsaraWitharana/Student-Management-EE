@@ -45,6 +45,17 @@ public class Student extends HttpServlet {
         //successfull unot -200 ok //201-create //204 -update/delete
         //client erro resp = clientget mokkhri waraddk unam --//400-490 // 400-bad req //401 Unauthorized//404 Not Found
         //server erro resp = server eke awlk unam enne // 500--//502-bad geteway
+
+//        out -put
+//        {
+//            "id":"S001",
+//                "name":"Sachini",
+//                "email":"sachini@gmail.com",
+//                "city":"Matara",
+//                "level":"L01"
+//
+//        }
+
     }
 
 
