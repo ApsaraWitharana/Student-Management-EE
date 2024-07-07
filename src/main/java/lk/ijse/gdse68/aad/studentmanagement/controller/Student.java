@@ -18,6 +18,15 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/student")
 public class Student extends HttpServlet {
     @Override
+    public void init() throws ServletException {
+      var initparameter = getServletContext().getInitParameter("myparam");
+        System.out.println(initparameter);
+
+//        out-put
+//        Hello Param
+    }
+
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doGet(req, resp);
 //        todo:Get student
