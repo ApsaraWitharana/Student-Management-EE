@@ -257,6 +257,7 @@ public class Student extends HttpServlet {
          if (ps.executeUpdate() !=0){
              //0 t wada wadi ganak iffect wennwad kiyl
 
+             writer.write(" Update Student Successfully!!");
              resp.setStatus(HttpServletResponse.SC_CREATED);
 
 
