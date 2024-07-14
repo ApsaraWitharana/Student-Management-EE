@@ -22,7 +22,9 @@ import java.sql.SQLException;
 public class Student extends HttpServlet {
     Connection connection;
     public static String SAVE_STUDENT = "INSERT INTO student (id,name,email,city,level) VALUES(?,?,?,?,?)";
-    public static String GET_STUDENT = "SELECT * FROM WHERE id";
+    public static String GET_STUDENT = "SELECT * FROM student WHERE id=?";
+    public static String UPDATE_STUDENT = "UPDATE student SET name=?,email=?,city=?,level=? WHERE id= ?";
+    public static String DELETE_STUDENT = "DELETE FROM student WHERE id=?";
     @Override
     public void init() throws ServletException {
 //      var initparameter = getServletContext().getInitParameter("myparam");
@@ -239,6 +241,34 @@ public class Student extends HttpServlet {
 //        todo:Update student
 
 
+      try(var writer =  resp.getWriter()) {
+          var studentId = req.getParameter("studentId");
+          Jsonb jsonb = JsonbBuilder.create();
+          StudentDTO student = jsonb.fromJson(req.getReader(),StudentDTO.class);
+
+
+          //SQL Process
+          var ps =  connection.prepareStatement(UPDATE_STUDENT);
+          ps.setString(1,student.getName());
+          ps.setString(2,student.getEmail());
+          ps.setString(3,student.getCity());
+          ps.setString(4,student.getLevel());
+          ps.setString(5,studentId);
+         if (ps.executeUpdate() !=0){
+             //0 t wada wadi ganak iffect wennwad kiyl
+
+             resp.setStatus(HttpServletResponse.SC_CREATED);
+
+
+         }else {
+             writer.write("Failed to Update Student!!");
+             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+         }
+
+      }catch (SQLException e){
+          e.printStackTrace();
+      }
 
 
 
@@ -251,5 +281,27 @@ public class Student extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doDelete(req, resp);
 //        todo:Delete student
+
+        try(var writer =  resp.getWriter()) {
+            var studentId = req.getParameter("studentId");
+            var ps = connection.prepareStatement(DELETE_STUDENT);
+            ps.setString(1,studentId);
+
+            if (ps.executeUpdate() !=0){
+                resp.setStatus(HttpServletResponse.SC_CREATED);
+
+
+            }else {
+                writer.write("Failed to DELETE Student!!");
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+            }
+
+
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
