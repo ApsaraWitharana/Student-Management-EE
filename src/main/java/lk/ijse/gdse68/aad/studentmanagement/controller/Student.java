@@ -22,6 +22,7 @@ import java.sql.SQLException;
 public class Student extends HttpServlet {
     Connection connection;
     public static String SAVE_STUDENT = "INSERT INTO student (id,name,email,city,level) VALUES(?,?,?,?,?)";
+    public static String GET_STUDENT = "SELECT * FROM WHERE id";
     @Override
     public void init() throws ServletException {
 //      var initparameter = getServletContext().getInitParameter("myparam");
@@ -49,7 +50,40 @@ public class Student extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doGet(req, resp);
-//        todo:Get student
+        //paylord eke body ekt mokuth danne body ekk enne ek enne parameter ekk widiyat -resfull krnkot stand ekk widiyt gnnwa
+//        todo:Get student.
+        //db oparatio ekk dto hriynne natte -> db oparation ekk pawichchi kranne entity
+        try (var writer = resp.getWriter()){
+            var studentDTO = new StudentDTO();
+           Jsonb jsonb = JsonbBuilder.create();
+
+            //id ek argent past kranwa postman t patameter ekk widiyt
+          var studentId =  req.getParameter("studentId");
+          var ps = connection.prepareStatement(GET_STUDENT);
+            ps.setString(1, studentId);
+            var rst = ps.executeQuery();
+          //null ekk enkm run wenwa
+          while (rst.next()){
+              studentDTO.setId(rst.getString("id"));
+              studentDTO.setName(rst.getString("name"));
+              studentDTO.setEmail(rst.getString("email"));
+              studentDTO.setCity(rst.getString("city"));
+              studentDTO.setLevel(rst.getString("level"));
+          }
+          //json format eken ywnne data tika - java object ek json ob ekk krgnn ona
+          //inform client to this is  server is send to json
+          //headers =
+          resp.setContentType("application/json");
+          //json ywnn ona client ta ek to json server ek wisin ywn hinda eken parameter balaporottu wenwa api lg inn ob ek writer ek req ek reder resp eke writer ekyi //utility 2k
+          jsonb.toJson(studentDTO,writer);
+            //json resp ek write krl ywnwa
+            //req ek -> client post req eken en req ek reade krnn tiyen utility ek reader ek
+            //fromjson-ftd eken en req ek gnn ek
+
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
 
     }
 
