@@ -14,13 +14,31 @@ import lk.ijse.gdse68.aad.studentmanagement.util.Util;
 import org.eclipse.yasson.internal.JsonBinding;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-@WebServlet(urlPatterns = "/student")
+@WebServlet(urlPatterns = "/student",loadOnStartup = 3)
 public class Student extends HttpServlet {
+    Connection connection;
     @Override
     public void init() throws ServletException {
-      var initparameter = getServletContext().getInitParameter("myparam");
-        System.out.println(initparameter);
+//      var initparameter = getServletContext().getInitParameter("myparam");
+//        System.out.println(initparameter);
+        //db ek coll wenne ek parayi ek wenne
+
+        try {
+            var dbClass = getServletContext().getInitParameter("db-class");
+            var dbUrl  = getServletContext().getInitParameter("dburl");
+            var dbUserName = getServletContext().getInitParameter("db-username");
+            var dbPassword = getServletContext().getInitParameter("db-password");
+            Class.forName(dbClass);
+            this.connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
+        }catch (ClassNotFoundException | SQLException e){
+            e.printStackTrace();
+
+        }
+
 
 //        out-put
 //        Hello Param

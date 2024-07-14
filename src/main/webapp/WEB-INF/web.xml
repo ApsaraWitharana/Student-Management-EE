@@ -22,4 +22,9 @@
         <param-name>db-password</param-name>
         <param-value>ijse@2001</param-value>
     </context-param>
+    <context-param>
+        <param-name>myparam</param-name>
+        <param-value>Hello my param</param-value>
+    </context-param>
+
 </web-app>
