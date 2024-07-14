@@ -289,6 +289,7 @@ public class Student extends HttpServlet {
             ps.setString(1,studentId);
 
             if (ps.executeUpdate() !=0){
+                writer.write(" Delete Student Successfully!!");
                 resp.setStatus(HttpServletResponse.SC_CREATED);
 
 
