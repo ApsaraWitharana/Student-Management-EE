@@ -21,6 +21,7 @@ import java.sql.SQLException;
 @WebServlet(urlPatterns = "/student",loadOnStartup = 3)
 public class Student extends HttpServlet {
     Connection connection;
+    public static String SAVE_STUDENT = "INSERT INTO student (id,name,email,city,level) VALUES(?,?,?,?,?)";
     @Override
     public void init() throws ServletException {
 //      var initparameter = getServletContext().getInitParameter("myparam");
@@ -34,6 +35,7 @@ public class Student extends HttpServlet {
             var dbPassword = getServletContext().getInitParameter("db-password");
             Class.forName(dbClass);
             this.connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
+
         }catch (ClassNotFoundException | SQLException e){
             e.printStackTrace();
 
@@ -72,6 +74,32 @@ public class Student extends HttpServlet {
         if (req.getContentType() == null || !req.getContentType().toLowerCase().startsWith("application/json")){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
+
+        //save student
+        try (var writer = resp.getWriter()){
+            Jsonb jsonb = JsonbBuilder.create();
+            StudentDTO student = jsonb.fromJson(req.getReader(), StudentDTO.class);
+            student.setId(Util.IdGenerate());
+            //Save data in the DB
+            var ps = connection.prepareStatement(SAVE_STUDENT);
+            ps.setString(1, student.getId());
+            ps.setString(2, student.getName());
+            ps.setString(3, student.getEmail());
+            ps.setString(4, student.getCity());
+            ps.setString(5, student.getLevel());
+            if(ps.executeUpdate() != 0){
+                resp.setStatus(HttpServletResponse.SC_CREATED);
+                writer.write("Save Student Successfully!!!");
+
+            }else {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                writer.write("Failed to Save Student!!");
+            }
+        }catch (SQLException e){
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+        }
+
 
        // 08. object binding of the json
 
@@ -173,8 +201,15 @@ public class Student extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(req, resp);
+//        super.doPut(req, resp);
 //        todo:Update student
+
+
+
+
+
+
+        //writer ek dal tiyeddi thaw ekk
 
     }
 

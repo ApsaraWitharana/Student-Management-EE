@@ -12,7 +12,7 @@
     </context-param>
     <context-param>
         <param-name>dburl</param-name>
-        <param-value>jdbc:mysql://localhost:3306</param-value>
+        <param-value>jdbc:mysql://localhost:3306/student_management</param-value>
     </context-param>
     <context-param>
         <param-name>db-username</param-name>
