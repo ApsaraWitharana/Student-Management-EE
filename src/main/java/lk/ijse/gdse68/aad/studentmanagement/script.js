@@ -87,10 +87,11 @@ function saveStudentData() {
     http.send(studentJSON) // empty body to coll GET method //05 //jason object ek yawanawa
 
 
-    // CORS policy - domain dekk athule data shar kragnn giyam enne domain dekk athara data shar krnn be
+    // CORS policy - domain dekk athara data shar kragnn giyam enne domain dekk athara data shar krnn be
     // 01 firstly sent option - http method ekk
     //02 send post method -
-    //alove krnn ona 4n 1 yi krl tiyenne ehinda tamayi erro enne
+    //allow krnn ona 4n 1 yi krl tiyenne ehinda tamayi erro enne //allow kranawada kiyl ,kamathida kiyl kelin kiynn ona
+    // req ek baragn kamati ne server ek e hind ethn issu ekk enne FE eken erro ekpennuwata ek handle krnne BE eken
     // CORS policy  - implement krnn ona backend eken
     // this request - pre-flight req // add two part
 
