@@ -16,6 +16,7 @@ public class CORSFilter extends HttpFilter {
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+        System.out.println("CORSFilter filter");
        var origin = getServletContext().getInitParameter("origin");  //web.xml eke connect krn origin ek methnin allagnnawa
         if (origin.contains(getServletContext().getInitParameter("origin"))){
             res.setHeader("Access-Control-Allow-Origin",origin);//allow kran kamaththa den kena thamyi methnt dann ona meke origin allwo krn kena kwd kiyl onannm url ek denn puluwn // mam wisin allow krnn ne me origin kiyl denne
@@ -30,3 +31,15 @@ public class CORSFilter extends HttpFilter {
         chain.doFilter(req,res); // chnage ekk krm ek issrh filter walat passs kragnnwa
     }
 }
+
+//  =======Saft-NonSaft======
+//    An HTTP method is safe if it doesn't alter the state of the server. In other words, a method is safe if
+//    it leads to a read-only operation. Several common HTTP methods are safe: GET, HEAD, or OPTIONS. All safe
+//    methods are also idempotent, but not all idempotent methods are safe. For example, PUT and DELETE are both
+//    idempotent but unsafe.
+
+//========idempotent - NonIdempotent=====
+//An HTTP method is idempotent if the intended effect on the server of making a single request is
+//        the same as the effect of making several identical requests.
+// saft method is idempotent but all are idempotent are not saft
+// get method is saft idempotent

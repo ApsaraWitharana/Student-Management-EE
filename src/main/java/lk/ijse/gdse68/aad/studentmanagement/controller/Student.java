@@ -13,6 +13,9 @@ import lk.ijse.gdse68.aad.studentmanagement.dto.StudentDTO;
 import lk.ijse.gdse68.aad.studentmanagement.util.Util;
 import org.eclipse.yasson.internal.JsonBinding;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,14 +35,17 @@ public class Student extends HttpServlet {
         //db ek coll wenne ek parayi ek wenne
 
         try {
-            var dbClass = getServletContext().getInitParameter("db-class");
-            var dbUrl  = getServletContext().getInitParameter("dburl");
-            var dbUserName = getServletContext().getInitParameter("db-username");
-            var dbPassword = getServletContext().getInitParameter("db-password");
-            Class.forName(dbClass);
-            this.connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
+//            var dbClass = getServletContext().getInitParameter("db-class");
+//            var dbUrl  = getServletContext().getInitParameter("dburl");
+//            var dbUserName = getServletContext().getInitParameter("db-username");
+//            var dbPassword = getServletContext().getInitParameter("db-password");
+//            Class.forName(dbClass);
 
-        }catch (ClassNotFoundException | SQLException e){
+          var ctx = new InitialContext(); // connection pool eken connection ekk arahnn ekt
+          DataSource pool = (DataSource) ctx.lookup("java:comp/env/jdbc/student_management"); // cast krl ek datasource ekk hdgnnwa // lookup => apit eken puluwn eke nm dila mokkhri gnna apit ona de lokup krl gann ek cast krgnn jenaric nida
+            this.connection = pool.getConnection(); // DataSource (connection pool ekkt)=> walin getconnection ekk
+
+        }catch ( SQLException | NamingException e){
             e.printStackTrace();
 
         }
