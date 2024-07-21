@@ -28,7 +28,7 @@
     </context-param>
     <context-param>
         <param-name>origin</param-name>
-        <param-value>http://localhost:63342</param-value>
+        <param-value>http://127.0.0.1:5500</param-value>
     </context-param>
 
 </web-app>
