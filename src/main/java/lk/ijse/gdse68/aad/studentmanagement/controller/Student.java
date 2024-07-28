@@ -249,22 +249,24 @@ static Logger logger = LoggerFactory.getLogger(Student.class);
           var studentDAOImpl = new  StudentDAOImpl();
           Jsonb jsonb = JsonbBuilder.create();
           StudentDTO student = jsonb.fromJson(req.getReader(),StudentDTO.class);
-          if (studentDAOImpl.updateStudent(studentId,student.connection));
-          resp.setStatus();
+          if(studentDAOImpl.updateStudent(studentId,student,connection)){
+              resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+          }else {
+              writer.write("Update failed");
+              resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          }
 
-
-          //SQL Process
-
-      }catch (SQLException e){
+      }catch (Exception e){
           e.printStackTrace();
       }
+    }
 
 
 
 
         //writer ek dal tiyeddi thaw ekk
 
-    }
+
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

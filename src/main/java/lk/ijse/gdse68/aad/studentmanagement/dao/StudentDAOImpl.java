@@ -56,13 +56,13 @@ public final class StudentDAOImpl implements StudentDAO {
             ps.setString(3, student.getCity());
             ps.setString(4, student.getLevel());
             ps.setString(5, id);
-            if (ps.executeUpdate() != 0) {
-                //0 t wada wadi ganak iffect wennwad kiyl
-            }
-        }catch (SQLException e){
+            return ps.executeUpdate() != 0;
 
+        }catch (SQLException e){
+            throw new SQLException(e.getMessage());
         }
     }
+
 
     @Override
     public StudentDTO getStudent(String id, Connection connection) throws Exception {
