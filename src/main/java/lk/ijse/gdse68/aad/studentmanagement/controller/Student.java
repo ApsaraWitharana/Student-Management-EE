@@ -132,8 +132,10 @@ public class Student extends HttpServlet {
             Jsonb jsonb = JsonbBuilder.create();
             var StudentBOImpl = new StudentBOImpl();
             StudentDTO student = jsonb.fromJson(req.getReader(), StudentDTO.class);
+            logger.info("Invoke idGenerate()");
             student.setId(Util.IdGenerate());
             writer.write(StudentBOImpl.saveStudent(student, connection));
+            logger.info("Student saved successfully");
             resp.setStatus(HttpServletResponse.SC_CREATED);
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -143,18 +145,18 @@ public class Student extends HttpServlet {
 
         // 08. object binding of the json
 
-        Jsonb jsonb = JsonbBuilder.create();  //json b type eke reference ekk hadagen jbilder eken
+     //   Jsonb jsonb = JsonbBuilder.create();  //json b type eke reference ekk hadagen jbilder eken
 //        var writer = resp.getWriter();
-        StudentDTO student = jsonb.fromJson(req.getReader(), StudentDTO.class); //eliyen en json student json t dagannwa fromjson gent pata 2 -reder and bined krn ob eke class type ek return krnne supplie krn class eke type ekk //map krgnnwa dto wl ek ek felde bined krnawa
-        student.setId(Util.IdGenerate()); //id ek genngnn on hind nattm null enne
-        System.out.println(student);
+   //     StudentDTO student = jsonb.fromJson(req.getReader(), StudentDTO.class); //eliyen en json student json t dagannwa fromjson gent pata 2 -reder and bined krn ob eke class type ek return krnne supplie krn class eke type ekk //map krgnnwa dto wl ek ek felde bined krnawa
+  //      student.setId(Util.IdGenerate()); //id ek genngnn on hind nattm null enne
+  //      System.out.println(student);
 //        writer.write(jsonb.toJson(student.toString()));
 //        output console -StudentDTO(id=65225d23-c4cf-45da-95bf-e1e2bd368647, name=Sachini, email=sachini@gmail.com, city=Matara, level=L02)
 
 
         //create response
-        resp.setContentType("application/json");  //oyat dn json type eke ekk enwa
-        jsonb.toJson(student, resp.getWriter());  //postman respoce body eke json type eke id ekk widiyt dgnn ona hinda 2json ekt pass krgnnwa writer eken paramere widiyt pass krgnnawa
+ //       resp.setContentType("application/json");  //oyat dn json type eke ekk enwa
+  //      jsonb.toJson(student, resp.getWriter());  //postman respoce body eke json type eke id ekk widiyt dgnn ona hinda 2json ekt pass krgnnwa writer eken paramere widiyt pass krgnnawa
 
 //        input-postman
 //        {
