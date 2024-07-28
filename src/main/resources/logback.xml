@@ -11,7 +11,7 @@
 
     </appenders>
     <appenders name="File" class="ch.qos.logback.core.FileAppender">
-        <file>\Users\sachi\OneDrive\Desktop\EE-Project1\StudentManagement
+        <file>\Users\sachi\OneDrive\Desktop\EE-Project1\StudentManagement\app.log
 <!--            location printe wenn ona kohed kiyl-->
 
         </file>

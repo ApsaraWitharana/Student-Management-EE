@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.ijse.gdse68.aad.studentmanagement.dao.StudentDAOImpl;
 import lk.ijse.gdse68.aad.studentmanagement.dto.StudentDTO;
 import lk.ijse.gdse68.aad.studentmanagement.util.Util;
 import org.eclipse.yasson.internal.JsonBinding;
@@ -41,9 +42,8 @@ public class Student extends HttpServlet {
 //
 static Logger logger = LoggerFactory.getLogger(Student.class);
     Connection connection;
-    public static String SAVE_STUDENT = "INSERT INTO student (id,name,email,city,level) VALUES(?,?,?,?,?)";
-    public static String GET_STUDENT = "SELECT * FROM student WHERE id=?";
-    public static String UPDATE_STUDENT = "UPDATE student SET name=?,email=?,city=?,level=? WHERE id= ?";
+
+
     public static String DELETE_STUDENT = "DELETE FROM student WHERE id=?";
     @Override
     public void init() throws ServletException {
@@ -79,38 +79,29 @@ static Logger logger = LoggerFactory.getLogger(Student.class);
         //paylord eke body ekt mokuth danne body ekk enne ek enne parameter ekk widiyat -resfull krnkot stand ekk widiyt gnnwa
 //        todo:Get student.
         //db oparatio ekk dto hriynne natte -> db oparation ekk pawichchi kranne entity
-        try (var writer = resp.getWriter()){
+        try (var writer = resp.getWriter()) {
             var studentDTO = new StudentDTO();
-           Jsonb jsonb = JsonbBuilder.create();
+            Jsonb jsonb = JsonbBuilder.create();
+            var studentDAOImpl = new StudentDAOImpl();
 
             //id ek argent past kranwa postman t patameter ekk widiyt
-          var studentId =  req.getParameter("studentId");
-          var ps = connection.prepareStatement(GET_STUDENT);
-            ps.setString(1, studentId);
-            var rst = ps.executeQuery();
-          //null ekk enkm run wenwa
-          while (rst.next()){
-              studentDTO.setId(rst.getString("id"));
-              studentDTO.setName(rst.getString("name"));
-              studentDTO.setEmail(rst.getString("email"));
-              studentDTO.setCity(rst.getString("city"));
-              studentDTO.setLevel(rst.getString("level"));
-          }
-          //json format eken ywnne data tika - java object ek json ob ekk krgnn ona
-          //inform client to this is  server is send to json
-          //headers =
-          resp.setContentType("application/json");
-          //json ywnn ona client ta ek to json server ek wisin ywn hinda eken parameter balaporottu wenwa api lg inn ob ek writer ek req ek reder resp eke writer ekyi //utility 2k
-          jsonb.toJson(studentDTO,writer);
+            var studentId = req.getParameter("studentId");
+
+            //json format eken ywnne data tika - java object ek json ob ekk krgnn ona
+            //inform client to this is  server is send to json
+            //headers =
+            resp.setContentType("application/json");
+
+            //json ywnn ona client ta ek to json server ek wisin ywn hinda eken parameter balaporottu wenwa api lg inn ob ek writer ek req ek reder resp eke writer ekyi //utility 2k
+//          jsonb.toJson(studentDTO,writer);
             //json resp ek write krl ywnwa
             //req ek -> client post req eken en req ek reade krnn tiyen utility ek reader ek
             //fromjson-ftd eken en req ek gnn ek
 
+            jsonb.toJson(studentDAOImpl.getStudent(studentId,connection),writer);
         }catch (Exception e){
             e.printStackTrace();
-
         }
-
     }
 
     @Override
@@ -138,24 +129,12 @@ static Logger logger = LoggerFactory.getLogger(Student.class);
         //save student
         try (var writer = resp.getWriter()){
             Jsonb jsonb = JsonbBuilder.create();
+            var StudentDAOImpl = new StudentDAOImpl();
             StudentDTO student = jsonb.fromJson(req.getReader(), StudentDTO.class);
             student.setId(Util.IdGenerate());
-            //Save data in the DB
-            var ps = connection.prepareStatement(SAVE_STUDENT);
-            ps.setString(1, student.getId());
-            ps.setString(2, student.getName());
-            ps.setString(3, student.getEmail());
-            ps.setString(4, student.getCity());
-            ps.setString(5, student.getLevel());
-            if(ps.executeUpdate() != 0){
-                resp.setStatus(HttpServletResponse.SC_CREATED);
-                writer.write("Save Student Successfully!!!");
-
-            }else {
-                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                writer.write("Failed to Save Student!!");
-            }
-        }catch (SQLException e){
+            writer.write(StudentDAOImpl.saveStudent(student,connection));
+            resp.setStatus(HttpServletResponse.SC_CREATED);
+        }catch (Exception e){
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             e.printStackTrace();
         }
@@ -267,29 +246,14 @@ static Logger logger = LoggerFactory.getLogger(Student.class);
 
       try(var writer =  resp.getWriter()) {
           var studentId = req.getParameter("studentId");
+          var studentDAOImpl = new  StudentDAOImpl();
           Jsonb jsonb = JsonbBuilder.create();
           StudentDTO student = jsonb.fromJson(req.getReader(),StudentDTO.class);
+          if (studentDAOImpl.updateStudent(studentId,student.connection));
+          resp.setStatus();
 
 
           //SQL Process
-          var ps =  connection.prepareStatement(UPDATE_STUDENT);
-          ps.setString(1,student.getName());
-          ps.setString(2,student.getEmail());
-          ps.setString(3,student.getCity());
-          ps.setString(4,student.getLevel());
-          ps.setString(5,studentId);
-         if (ps.executeUpdate() !=0){
-             //0 t wada wadi ganak iffect wennwad kiyl
-
-             writer.write(" Update Student Successfully!!");
-             resp.setStatus(HttpServletResponse.SC_CREATED);
-
-
-         }else {
-             writer.write("Failed to Update Student!!");
-             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-
-         }
 
       }catch (SQLException e){
           e.printStackTrace();
