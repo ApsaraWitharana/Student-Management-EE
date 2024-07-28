@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lk.ijse.gdse68.aad.studentmanagement.dto.StudentDTO;
 import lk.ijse.gdse68.aad.studentmanagement.util.Util;
 import org.eclipse.yasson.internal.JsonBinding;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -20,7 +22,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 
 @WebServlet(urlPatterns = "/student",loadOnStartup = 3)
 public class Student extends HttpServlet {
@@ -38,7 +39,7 @@ public class Student extends HttpServlet {
 //    2.Log4j
 //    3.logback
 //
-static  Logger logger =   Logger.getLogger(Student.class.getName());
+static Logger logger = LoggerFactory.getLogger(Student.class);
     Connection connection;
     public static String SAVE_STUDENT = "INSERT INTO student (id,name,email,city,level) VALUES(?,?,?,?,?)";
     public static String GET_STUDENT = "SELECT * FROM student WHERE id=?";
@@ -46,7 +47,7 @@ static  Logger logger =   Logger.getLogger(Student.class.getName());
     public static String DELETE_STUDENT = "DELETE FROM student WHERE id=?";
     @Override
     public void init() throws ServletException {
-        logger.info("Hello init");
+        logger.info("Hello method invoked");
 //     var initparameter = getServletContext().getInitParameter("myparam");
 //        System.out.println(initparameter);
         //db ek coll wenne ek parayi ek wenne
@@ -61,7 +62,7 @@ static  Logger logger =   Logger.getLogger(Student.class.getName());
           var ctx = new InitialContext(); // connection pool eken connection ekk arahnn ekt
           DataSource pool = (DataSource) ctx.lookup("java:comp/env/jdbc/student_management"); // cast krl ek datasource ekk hdgnnwa // lookup => apit eken puluwn eke nm dila mokkhri gnna apit ona de lokup krl gann ek cast krgnn jenaric nida
             this.connection = pool.getConnection(); //namk dunnam eken hoyagnnw datasource ek== DataSource (connection pool ekkt)=> walin getconnection ekk
-
+            logger.info("connection initialized", this.connection);
         }catch ( SQLException | NamingException e){
             e.printStackTrace();
 

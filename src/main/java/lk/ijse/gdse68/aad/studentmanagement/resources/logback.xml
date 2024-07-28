@@ -1,0 +1,26 @@
+<configuration>
+
+    <appenders name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <endcoder>
+<!--            log eke date time -->
+            <pattern>
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </pattern>
+        </endcoder>
+<!-- adala log msg ek dagann apit log ek print wenn one kohed kiyl-->
+
+    </appenders>
+    <appenders name="File" class="ch.qos.logback.core.FileAppender">
+        <file>\Users\sachi\OneDrive\Desktop\EE-Project1\StudentManagement
+<!--            location printe wenn ona kohed kiyl-->
+
+        </file>
+        <append>true</append>
+        <endcoder>
+            <!--            log eke date time -->
+            <pattern>
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </pattern>
+        </endcoder>
+    </appenders>
+</configuration>
