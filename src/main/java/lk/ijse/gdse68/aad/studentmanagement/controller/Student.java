@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.ijse.gdse68.aad.studentmanagement.bo.StudentBOImpl;
 import lk.ijse.gdse68.aad.studentmanagement.dao.StudentDAOImpl;
 import lk.ijse.gdse68.aad.studentmanagement.dto.StudentDTO;
 import lk.ijse.gdse68.aad.studentmanagement.util.Util;
@@ -80,9 +81,9 @@ public class Student extends HttpServlet {
 //        todo:Get student.
         //db oparatio ekk dto hriynne natte -> db oparation ekk pawichchi kranne entity
         try (var writer = resp.getWriter()) {
-            var studentDTO = new StudentDTO();
+            var studentBOImpl = new StudentBOImpl();
             Jsonb jsonb = JsonbBuilder.create();
-            var studentDAOImpl = new StudentDAOImpl();
+
 
             //id ek argent past kranwa postman t patameter ekk widiyt
             var studentId = req.getParameter("studentId");
@@ -98,7 +99,7 @@ public class Student extends HttpServlet {
             //req ek -> client post req eken en req ek reade krnn tiyen utility ek reader ek
             //fromjson-ftd eken en req ek gnn ek
 
-            jsonb.toJson(studentDAOImpl.getStudent(studentId, connection), writer);
+            jsonb.toJson(studentBOImpl.getStudent(studentId, connection), writer);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -129,10 +130,10 @@ public class Student extends HttpServlet {
         //save student
         try (var writer = resp.getWriter()) {
             Jsonb jsonb = JsonbBuilder.create();
-            var StudentDAOImpl = new StudentDAOImpl();
+            var StudentBOImpl = new StudentBOImpl();
             StudentDTO student = jsonb.fromJson(req.getReader(), StudentDTO.class);
             student.setId(Util.IdGenerate());
-            writer.write(StudentDAOImpl.saveStudent(student, connection));
+            writer.write(StudentBOImpl.saveStudent(student, connection));
             resp.setStatus(HttpServletResponse.SC_CREATED);
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -245,10 +246,10 @@ public class Student extends HttpServlet {
 
         try (var writer = resp.getWriter()) {
             var studentId = req.getParameter("studentId");
-            var studentDAOImpl = new StudentDAOImpl();
+            var studentBOImpl = new StudentBOImpl();
             Jsonb jsonb = JsonbBuilder.create();
             StudentDTO student = jsonb.fromJson(req.getReader(), StudentDTO.class);
-            if (studentDAOImpl.updateStudent(studentId, student, connection)) {
+            if ( studentBOImpl.updateStudent(studentId, student, connection)) {
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
             } else {
                 writer.write("Update failed");
@@ -272,8 +273,8 @@ public class Student extends HttpServlet {
         try (var writer = resp.getWriter()) {
             var studentId = req.getParameter("studentId");
 
-            var studentDAOIMPL = new StudentDAOImpl();
-            if (studentDAOIMPL.deleteStudent(studentId, connection)) {
+            var studentBOImpl = new StudentBOImpl();
+            if (studentBOImpl.deleteStudent(studentId, connection)) {
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
             } else {
                 writer.write("Delete failed");
