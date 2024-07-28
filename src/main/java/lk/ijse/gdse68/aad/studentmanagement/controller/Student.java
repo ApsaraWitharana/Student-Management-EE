@@ -20,9 +20,25 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 @WebServlet(urlPatterns = "/student",loadOnStartup = 3)
 public class Student extends HttpServlet {
+//    =======logs====
+    //in belt
+    //pass string
+    //limitation hinda login library use krgnnawa dependence widiyst dagnne
+  //1.Adding needed libraries
+  //2. Configuration
+  //3. Placing log statements
+
+//    framework. -library
+//application eke state ekt document ekk hadagnn use we = erros coll method time ekt ekk blagnn
+//    1.Log4j 2 -fetchers wadi
+//    2.Log4j
+//    3.logback
+//
+static  Logger logger =   Logger.getLogger(Student.class.getName());
     Connection connection;
     public static String SAVE_STUDENT = "INSERT INTO student (id,name,email,city,level) VALUES(?,?,?,?,?)";
     public static String GET_STUDENT = "SELECT * FROM student WHERE id=?";
@@ -30,7 +46,8 @@ public class Student extends HttpServlet {
     public static String DELETE_STUDENT = "DELETE FROM student WHERE id=?";
     @Override
     public void init() throws ServletException {
-//      var initparameter = getServletContext().getInitParameter("myparam");
+        logger.info("Hello init");
+//     var initparameter = getServletContext().getInitParameter("myparam");
 //        System.out.println(initparameter);
         //db ek coll wenne ek parayi ek wenne
 
@@ -43,7 +60,7 @@ public class Student extends HttpServlet {
 
           var ctx = new InitialContext(); // connection pool eken connection ekk arahnn ekt
           DataSource pool = (DataSource) ctx.lookup("java:comp/env/jdbc/student_management"); // cast krl ek datasource ekk hdgnnwa // lookup => apit eken puluwn eke nm dila mokkhri gnna apit ona de lokup krl gann ek cast krgnn jenaric nida
-            this.connection = pool.getConnection(); // DataSource (connection pool ekkt)=> walin getconnection ekk
+            this.connection = pool.getConnection(); //namk dunnam eken hoyagnnw datasource ek== DataSource (connection pool ekkt)=> walin getconnection ekk
 
         }catch ( SQLException | NamingException e){
             e.printStackTrace();
