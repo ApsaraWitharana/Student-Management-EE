@@ -30,21 +30,21 @@ public class Student extends HttpServlet {
     //in belt
     //pass string
     //limitation hinda login library use krgnnawa dependence widiyst dagnne
-  //1.Adding needed libraries
-  //2. Configuration
-  //3. Placing log statements
+    //1.Adding needed libraries
+    //2. Configuration
+    //3. Placing log statements
 
-//    framework. -library
+    //    framework. -library
 //application eke state ekt document ekk hadagnn use we = erros coll method time ekt ekk blagnn
 //    1.Log4j 2 -fetchers wadi
 //    2.Log4j
 //    3.logback
 //
-static Logger logger = LoggerFactory.getLogger(Student.class);
+    static Logger logger = LoggerFactory.getLogger(Student.class);
     Connection connection;
 
 
-    public static String DELETE_STUDENT = "DELETE FROM student WHERE id=?";
+
     @Override
     public void init() throws ServletException {
         logger.info("Hello method invoked");
@@ -59,11 +59,11 @@ static Logger logger = LoggerFactory.getLogger(Student.class);
 //            var dbPassword = getServletContext().getInitParameter("db-password");
 //            Class.forName(dbClass);
 
-          var ctx = new InitialContext(); // connection pool eken connection ekk arahnn ekt
-          DataSource pool = (DataSource) ctx.lookup("java:comp/env/jdbc/student_management"); // cast krl ek datasource ekk hdgnnwa // lookup => apit eken puluwn eke nm dila mokkhri gnna apit ona de lokup krl gann ek cast krgnn jenaric nida
+            var ctx = new InitialContext(); // connection pool eken connection ekk arahnn ekt
+            DataSource pool = (DataSource) ctx.lookup("java:comp/env/jdbc/student_management"); // cast krl ek datasource ekk hdgnnwa // lookup => apit eken puluwn eke nm dila mokkhri gnna apit ona de lokup krl gann ek cast krgnn jenaric nida
             this.connection = pool.getConnection(); //namk dunnam eken hoyagnnw datasource ek== DataSource (connection pool ekkt)=> walin getconnection ekk
             logger.info("connection initialized", this.connection);
-        }catch ( SQLException | NamingException e){
+        } catch (SQLException | NamingException e) {
             e.printStackTrace();
 
         }
@@ -98,8 +98,8 @@ static Logger logger = LoggerFactory.getLogger(Student.class);
             //req ek -> client post req eken en req ek reade krnn tiyen utility ek reader ek
             //fromjson-ftd eken en req ek gnn ek
 
-            jsonb.toJson(studentDAOImpl.getStudent(studentId,connection),writer);
-        }catch (Exception e){
+            jsonb.toJson(studentDAOImpl.getStudent(studentId, connection), writer);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -121,26 +121,26 @@ static Logger logger = LoggerFactory.getLogger(Student.class);
         //02.JSON
         //1.get the header to content type header check null d nattam chek krnwa ! nattam kiyl blnwa kohomad wenne kiyl
         //if true unam hadpu client ge kiyl ne ewnnw mokkd kiyl
-       //client gent en data eke validate ek
-        if (req.getContentType() == null || !req.getContentType().toLowerCase().startsWith("application/json")){
+        //client gent en data eke validate ek
+        if (req.getContentType() == null || !req.getContentType().toLowerCase().startsWith("application/json")) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
 
         //save student
-        try (var writer = resp.getWriter()){
+        try (var writer = resp.getWriter()) {
             Jsonb jsonb = JsonbBuilder.create();
             var StudentDAOImpl = new StudentDAOImpl();
             StudentDTO student = jsonb.fromJson(req.getReader(), StudentDTO.class);
             student.setId(Util.IdGenerate());
-            writer.write(StudentDAOImpl.saveStudent(student,connection));
+            writer.write(StudentDAOImpl.saveStudent(student, connection));
             resp.setStatus(HttpServletResponse.SC_CREATED);
-        }catch (Exception e){
+        } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             e.printStackTrace();
         }
 
 
-       // 08. object binding of the json
+        // 08. object binding of the json
 
         Jsonb jsonb = JsonbBuilder.create();  //json b type eke reference ekk hadagen jbilder eken
 //        var writer = resp.getWriter();
@@ -153,7 +153,7 @@ static Logger logger = LoggerFactory.getLogger(Student.class);
 
         //create response
         resp.setContentType("application/json");  //oyat dn json type eke ekk enwa
-        jsonb.toJson(student,resp.getWriter());  //postman respoce body eke json type eke id ekk widiyt dgnn ona hinda 2json ekt pass krgnnwa writer eken paramere widiyt pass krgnnawa
+        jsonb.toJson(student, resp.getWriter());  //postman respoce body eke json type eke id ekk widiyt dgnn ona hinda 2json ekt pass krgnnwa writer eken paramere widiyt pass krgnnawa
 
 //        input-postman
 //        {
@@ -172,7 +172,6 @@ static Logger logger = LoggerFactory.getLogger(Student.class);
 //                    "level": "L02",
 //                    "name": "Sachini"
 //        }
-
 
 
 //    03.    BufferedReader reader = req.getReader(); //reade req
@@ -227,7 +226,7 @@ static Logger logger = LoggerFactory.getLogger(Student.class);
 //           out-put
 //           Sakuni
 //           sakuni@gmail.com
-     //  }
+        //  }
 
         //json p type eke
         // 05.send data to client
@@ -244,28 +243,25 @@ static Logger logger = LoggerFactory.getLogger(Student.class);
 //        todo:Update student
 
 
-      try(var writer =  resp.getWriter()) {
-          var studentId = req.getParameter("studentId");
-          var studentDAOImpl = new  StudentDAOImpl();
-          Jsonb jsonb = JsonbBuilder.create();
-          StudentDTO student = jsonb.fromJson(req.getReader(),StudentDTO.class);
-          if(studentDAOImpl.updateStudent(studentId,student,connection)){
-              resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
-          }else {
-              writer.write("Update failed");
-              resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-          }
+        try (var writer = resp.getWriter()) {
+            var studentId = req.getParameter("studentId");
+            var studentDAOImpl = new StudentDAOImpl();
+            Jsonb jsonb = JsonbBuilder.create();
+            StudentDTO student = jsonb.fromJson(req.getReader(), StudentDTO.class);
+            if (studentDAOImpl.updateStudent(studentId, student, connection)) {
+                resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            } else {
+                writer.write("Update failed");
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
 
-      }catch (Exception e){
-          e.printStackTrace();
-      }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
-
-
-        //writer ek dal tiyeddi thaw ekk
-
+    //writer ek dal tiyeddi thaw ekk
 
 
     @Override
@@ -273,27 +269,20 @@ static Logger logger = LoggerFactory.getLogger(Student.class);
 //        super.doDelete(req, resp);
 //        todo:Delete student
 
-        try(var writer =  resp.getWriter()) {
+        try (var writer = resp.getWriter()) {
             var studentId = req.getParameter("studentId");
-            var ps = connection.prepareStatement(DELETE_STUDENT);
-            ps.setString(1,studentId);
 
-            if (ps.executeUpdate() !=0){
-                writer.write(" Delete Student Successfully!!");
-                resp.setStatus(HttpServletResponse.SC_CREATED);
-
-
-            }else {
-                writer.write("Failed to DELETE Student!!");
+            var studentDAOIMPL = new StudentDAOImpl();
+            if (studentDAOIMPL.deleteStudent(studentId, connection)) {
+                resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            } else {
+                writer.write("Delete failed");
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-
             }
 
-
-
-
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
